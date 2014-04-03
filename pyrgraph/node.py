@@ -35,3 +35,24 @@ class Node(Entity):
     def delete(self):
         self.get_redis().delete(self.key(self.id));
 
+    def incoming(self, type):
+        key     = pyrgraph.prefix + ':' + self.id + ':r:#' + type + ':in'
+        records = self.get_redis().zrevrangebyscore(key, "+inf", "-inf", withscores=True)
+        result  = []
+
+        for item in records:
+            node = self.get(item[0]);
+            result.append((node, item[1]))
+
+        return result
+
+    def outgoing(self, type):
+        key     = pyrgraph.prefix + ':' + self.id + ':r:#' + type + ':out'
+        records = self.get_redis().zrevrangebyscore(key, "+inf", "-inf", withscores=True)
+        result  = []
+
+        for item in records:
+            node = self.get(item[0]);
+            result.append((node, item[1]))
+
+        return result
