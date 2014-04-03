@@ -15,8 +15,18 @@ node2.save()
 
 
 rel = Relationship(start=node1, end=node2, type="depends", weight=100)
+rel.attrs['name'] = 'ddd';
 rel.save()
 
+rel.increment_weight(10);
+print rel.weight;
 
-rel2 = Relationship.get(node1, node2, type="depends");
-print rel2
+rel.decerement_weight(10);
+print rel.weight;
+
+rel.delete()
+node1.delete();
+node2.delete();
+
+#rel2 = Relationship.get(node1, node2, type="depends");
+#print rel2.weight
